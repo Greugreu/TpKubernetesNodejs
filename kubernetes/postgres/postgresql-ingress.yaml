@@ -11,7 +11,7 @@ spec:
           - pathType: Prefix
             backend:
               service:
-                name: api
+                name: postgresql
                 port:
                   number: 5432
             path: /
