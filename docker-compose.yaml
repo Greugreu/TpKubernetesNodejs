@@ -1,0 +1,45 @@
+# docker-compose.yml
+version: "3.5"
+services:
+  api:
+    image: greugreu/nodeapi:1.0.4
+    restart: on-failure
+    build: .
+    # scale: 3
+    expose:
+      - 3000
+    environment:
+      DB_HOST: postgres
+      DB_USERNAME: 'postgres'
+      DB_PASSWORD: '!P@ssW0rd?'
+      DB_DATABASE: 'db'
+      DB_DAILECT: 'postgres'
+      DB_PORT: 5432
+      DATABASE_URL: postgres://postgres:!P@ssW0rd?@postgres:5432/db
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    depends_on:
+      - postgresql
+
+  postgresql:
+      image: postgres
+      ports:
+        - "5432:5432"
+      restart: always
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=!P@ssW0rd?
+        - POSTGRES_DB=db
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
